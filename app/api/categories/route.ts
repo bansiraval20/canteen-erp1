@@ -29,3 +29,26 @@ export async function POST(req: Request) {
     )
   }
 }
+
+export async function GET() {
+  try {
+    await connectDB()
+    
+    const categories = await Category.find()
+
+    return NextResponse.json({
+      success: true,
+      data: categories,
+    })
+  } catch (error) {
+    console.error(error)
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to fetch categories',
+      },
+      { status: 500 }
+    )
+  }
+}

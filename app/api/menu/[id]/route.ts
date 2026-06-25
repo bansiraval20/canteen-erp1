@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoDB'
-import { Category } from '@/models/Category'
+import { MenuItem } from '@/models/MenuItem'
 
 export async function PUT(
   req: Request,
@@ -12,21 +12,40 @@ export async function PUT(
     const body = await req.json()
     const { id } = await params
 
-    const category = await Category.findByIdAndUpdate(
+    const menuItem = await MenuItem.findByIdAndUpdate(
       id,
-      { name: body.name },
+      { 
+        name: body.name,
+        description: body.description,
+        price: body.price,
+        image: body.image,
+        stock: body.stock,
+        isAvailable: body.isAvailable,  
+      },
       { new: true }
     )
 
+    if (!menuItem) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Menu item not found',
+        },
+        { status: 404 }
+      )
+    }
+
     return NextResponse.json({
       success: true,
-      data: category,
+      data: menuItem,
     })
   } catch (error) {
+    console.error(error)
+
     return NextResponse.json(
       {
         success: false,
-        message: 'Failed to update category',
+        message: 'Failed to update menu item',
       },
       { status: 500 }
     )
@@ -44,11 +63,11 @@ export async function DELETE(
 
     const { id } = await params
 
-    await Category.findByIdAndDelete(id)
+    await MenuItem.findByIdAndDelete(id)
 
     return NextResponse.json({
       success: true,
-      message: 'Category deleted',
+      message: 'MenuItem deleted',
     })
   } catch (error) {
     return NextResponse.json(

@@ -2,12 +2,6 @@ import mongoose, { Schema, models, model } from "mongoose";
 
 const TableSchema = new Schema(
   {
-    restaurantId: {
-      type: Schema.Types.ObjectId,
-      ref: "Restaurant",
-      required: true,
-    },
-
     tableNumber: {
       type: Number,
       required: true,

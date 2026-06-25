@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoDB'
-import { Category } from '@/models/Category'
+import { Table } from '@/models/Table'
 
 export async function PUT(
   req: Request,
@@ -12,28 +12,31 @@ export async function PUT(
     const body = await req.json()
     const { id } = await params
 
-    const category = await Category.findByIdAndUpdate(
+    const table = await Table.findByIdAndUpdate(
       id,
-      { name: body.name },
+      {
+        tableNumber: body.tableNumber,
+        isOccupied: body.isOccupied,
+        isActive: body.isActive,
+      },
       { new: true }
     )
 
     return NextResponse.json({
       success: true,
-      data: category,
+      data: table,
     })
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Failed to update category',
+        message: 'Failed to update table',
       },
       { status: 500 }
     )
   }
 }
 
-// Delete operation
 
 export async function DELETE(
   req: Request,
@@ -44,17 +47,17 @@ export async function DELETE(
 
     const { id } = await params
 
-    await Category.findByIdAndDelete(id)
+    await Table.findByIdAndDelete(id)
 
     return NextResponse.json({
       success: true,
-      message: 'Category deleted',
+      message: 'Table deleted successfully',
     })
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Failed to delete category',
+        message: 'Failed to delete table',
       },
       { status: 500 }
     )

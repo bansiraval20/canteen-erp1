@@ -2,12 +2,6 @@ import mongoose, { Schema, models, model } from "mongoose";
 
 const MenuItemSchema = new Schema(
   {
-    restaurantId: {
-      type: Schema.Types.ObjectId,
-      ref: "Restaurant",
-      required: true,
-    },
-
     categoryId: {
       type: Schema.Types.ObjectId,
       ref: "Category",
